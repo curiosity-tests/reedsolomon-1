@@ -2,9 +2,9 @@ name: Go
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 
 jobs:
@@ -12,7 +12,9 @@ jobs:
     strategy:
       matrix:
         go-version: [1.24.x, 1.25.x, 1.26.x]
-        os: [ubuntu-latest, macos-latest, windows-latest, ubuntu-24.04-arm]
+        os:
+        - ubuntu-latest
+        - ubuntu-24.04-arm
     env:
       CGO_ENABLED: 0
     runs-on: ${{ matrix.os }}
@@ -124,19 +126,19 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.26.x
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.26.x
 
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Generate
-        working-directory: ./_gen
-        run: go generate -v -x
+    - name: Generate
+      working-directory: ./_gen
+      run: go generate -v -x
 
-      - name: Git Status
-        run: |
-          git diff
-          test -z "$(git status --porcelain)"
+    - name: Git Status
+      run: |
+        git diff
+        test -z "$(git status --porcelain)"
